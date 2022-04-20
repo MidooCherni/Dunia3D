@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
+=======
+# automatically generated gitignore file
+# i trust you fuckers
+#
+
+>>>>>>> bca365f... initial commit
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -47,6 +54,10 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+<<<<<<< HEAD
+=======
+*.meta
+>>>>>>> bca365f... initial commit
 
 # Unity3D generated file on crash reports
 sysinfo.txt
@@ -57,4 +68,7 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+<<<<<<< HEAD
 
+=======
+>>>>>>> bca365f... initial commit

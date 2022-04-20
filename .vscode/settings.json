@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/*.cs.meta": true,
+        "**/*.meta": true,
+        "**/Library":true,
+        "**/Logs":true,
+        "**/Temp":true,
+        "**/*.csproj":true,
+        "**/*.sln":true,
+        "**/.vscode":true,
+        "**/Packages":true,
+        "**/ProjectSettings":true,
+        "**/UserSettings":true,
+        "**/Assets/Materials":true,
+        "**/Assets/Textures":true,
+        "**/Assets/Scenes":true,
+    }
+}
