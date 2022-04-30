@@ -1,16 +1,20 @@
-    (X)     Movement
-    (X)     Netcode I
-                Basic player movement tracking
-                Broadcasting concatenated update array to all players: Client on receiving this array, loops through it and compares it to
-                    oldarray. If oldarray has a unit where there should be a 0 prefabid, declare that unit's death. If oldarray has a 0  
-                    where there should be a prefabid, go through the motions of creating it. If they're the same, update positions.
-                    Example server message: 0$0$0$0$DEBUG_3.11_5.74_1.52_180$0$CHERNI_0.00_1.00_0.00_271$0$0$0 ... until 100th
-                Names over player heads
-    ( )     Health, stats, spells, melee combat, enemies, all kept server-side.
-    ( )     Netcode II
-                Spell queue system: When a melee timer or spellcast ends, it is added to a spell_queue array in the form of [spellid]_[tar]
-                    and the queue_counter count is increased. If queue_counter > 0, this array is formatted and sent along with the second
-                    client to server communication, then the array is cleared and the counter reset. If queue_counter = 0, send 'n'.
-                    The melee timer cannot reset to 0 after reaching cooldown, nor can is_casting and the spellcast counter reset to 
-                    zero until the second server to client communication announcing '1' to declare that a received queue was treated. 
-                    Otherwise it continuously sends '2', to signal that it's waiting.
+    baseline shit
+
+    (X)     mouselook
+    (X)     stats, hud
+    ( )     attack sheathing, attacking
+    ( )     enemies, attacking, taking damage, killing
+    ( )     spells, magic sheathing, casting 
+    ( )     inventory, items, eating, drinking
+    ( )     paperdoll + stat screen + inventory panel
+    ( )     equipment, wearing shit, hud weapon models
+    ( )     simple pathfinding
+    ( )     maps, loading areas
+    ( )     character creation, saving and loading
+    ( )     content...
+
+
+
+    HP, MP, SP, XP, armor   int     2,147,483,647
+    item, spell, buff ids   short   32,767
+    stats, skills           byte    255

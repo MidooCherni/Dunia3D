@@ -54,10 +54,6 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
-<<<<<<< HEAD
-=======
-*.meta
->>>>>>> bca365f... initial commit
 
 # Unity3D generated file on crash reports
 sysinfo.txt
