@@ -50,7 +50,17 @@ public class AttackScript : MonoBehaviour
         }
         if(Input.GetMouseButtonUp(0)){
             if(status == Status.PULL){
-                                                    // TODO: do damage!!
+                RaycastHit hit;
+                if(Physics.Raycast(player.transform.position, player.transform.forward, out hit, 6.0f)){
+                    if(hit.transform.gameObject.tag == "NPC"){ 
+                        if(hit.transform.gameObject.GetComponent<MobBehavior>().status != State.FLINCH && 
+                            hit.transform.gameObject.GetComponent<MobBehavior>().status != State.DEAD){
+                            // WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                            hit.transform.gameObject.GetComponent<StatHandler>().CURRENT_HP -= player.GetComponent<StatHandler>().STR;
+                            hit.transform.gameObject.GetComponent<MobBehavior>().status = State.FLINCH;
+                        }
+                    }
+                }
                 weapon.GetComponent<Image>().sprite = spr_recover;
                 status = Status.RECOVER;
                 attack_cd = 0;

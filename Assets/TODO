@@ -2,12 +2,13 @@
 
     (X)     mouselook
     (X)     stats, hud
-    ( )     attack sheathing, attacking
-    ( )     enemies, attacking, taking damage, killing
-    ( )     spells, magic sheathing, casting 
+    (X)     attack sheathing, attacking
+    (X)     enemies, attacking, taking damage, killing
     ( )     inventory, items, eating, drinking
     ( )     paperdoll + stat screen + inventory panel
     ( )     equipment, wearing shit, hud weapon models
+    ( )     spells, magic sheathing, casting 
+    ( )     lootable enemies
     ( )     simple pathfinding
     ( )     maps, loading areas
     ( )     character creation, saving and loading
