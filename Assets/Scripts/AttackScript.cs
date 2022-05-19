@@ -56,6 +56,7 @@ public class AttackScript : MonoBehaviour
                         if(hit.transform.gameObject.GetComponent<MobBehavior>().status != State.FLINCH && 
                             hit.transform.gameObject.GetComponent<MobBehavior>().status != State.DEAD){
                             // WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                                    // TODO: make damage calculation code
                             hit.transform.gameObject.GetComponent<StatHandler>().CURRENT_HP -= player.GetComponent<StatHandler>().STR;
                             hit.transform.gameObject.GetComponent<MobBehavior>().status = State.FLINCH;
                         }
