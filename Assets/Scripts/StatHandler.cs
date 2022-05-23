@@ -14,6 +14,10 @@ public class StatHandler : MonoBehaviour
     int[] buffs = {0};
     int[] debuffs = {0};
 
+        // inventory ids for worn items
+    // ear1 ear2 ring1 ring2 wrist1 wrist2 face head neck shoulders back chest hands waist legs feet weapon offhand
+    short[] equipSlots = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
         // dynamic values
     public int CURRENT_HP = 1;
     public int CURRENT_MP = 0;
@@ -36,22 +40,14 @@ public class StatHandler : MonoBehaviour
     public byte CHA = 0;  byte bCHA = 0;
 
         // resistances
-    byte RES_HOLY = 0;     byte bRES_HOLY = 0;   
-    byte RES_FIRE = 0;     byte bRES_FIRE = 0;   
-    byte RES_FROST = 0;    byte bRES_FROST = 0;  
-    byte RES_ARCANE = 0;   byte bRES_ARCANE = 0; 
-    byte RES_NATURE = 0;   byte bRES_NATURE = 0; 
-    byte RES_SHADOW = 0;   short bRES_SHADOW = 0; 
+    public byte RES_HOLY = 0;     byte bRES_HOLY = 0;   
+    public byte RES_FIRE = 0;     byte bRES_FIRE = 0;   
+    public byte RES_FROST = 0;    byte bRES_FROST = 0;  
+    public byte RES_ARCANE = 0;   byte bRES_ARCANE = 0; 
+    public byte RES_NATURE = 0;   byte bRES_NATURE = 0;
+    public byte RES_SHADOW = 0;   byte bRES_SHADOW = 0;
 
-    void Start(){       // TODO: proper calculations!!
-        bSTR = STR;
-        bCON = CON;
-        bDEX = DEX;
-        bAGI = AGI;
-        bINT = INT;
-        bWIS = WIS;
-        bCHA = CHA;
-
+    public void recalculateCaps(){      // TODO: CLEANER SHIT
         int hval;
         switch(classname){
             case "Warrior":
@@ -84,7 +80,25 @@ public class StatHandler : MonoBehaviour
                 break;
         }
         MAX_HP = (int)(LEVEL + CON) * hval;
-        MAX_SP = 100;                                 // TODO: ATHLETICS
+        MAX_SP = 100;
+    }
+
+    void Start(){       // TODO: proper stat tracking
+        bSTR = STR;
+        bCON = CON;
+        bDEX = DEX;
+        bAGI = AGI;
+        bINT = INT;
+        bWIS = WIS;
+        bCHA = CHA;
+        RES_HOLY = bRES_HOLY;
+        RES_FIRE = bRES_FIRE;
+        RES_FROST = bRES_FROST;
+        RES_ARCANE = bRES_ARCANE;
+        RES_NATURE = bRES_NATURE;
+        RES_SHADOW = bRES_SHADOW;
+
+        recalculateCaps();
 
         CURRENT_HP = MAX_HP;
         CURRENT_MP = MAX_MP;

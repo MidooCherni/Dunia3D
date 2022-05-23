@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: return these shits
+
 public class SkillHandler : MonoBehaviour
 {
         // skills
             // weapons              // combat               // sciences             // crafts
-    byte LightSlash = 0;   byte Tactics = 0;      byte Anatomy = 0;      byte Alchemy = 0;
+    /*byte LightSlash = 0;   byte Tactics = 0;      byte Anatomy = 0;      byte Alchemy = 0;
     byte LightBlunt = 0;   byte Parry = 0;        byte AnimalLore = 0;   byte Carpentry = 0;
     byte HeavySlash = 0;   byte HeavyArmor = 0;   byte Artifacts = 0;    byte Cooking = 0;
     byte HeavyBlunt = 0;   byte Athletics = 0;    byte Botany = 0;       byte Fishing = 0;
@@ -29,5 +31,5 @@ public class SkillHandler : MonoBehaviour
         byte Restoration = 0;      
         byte Transmutation = 0;    
         byte Musicianship = 0;     
-        byte Singing = 0; 
+        byte Singing = 0; */
 }

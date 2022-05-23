@@ -4,7 +4,7 @@
     (X)     stats, hud
     (X)     attack sheathing, attacking
     (X)     enemies, attacking, taking damage, killing
-    (-)     inventory, items, eating, drinking
+    (X)     inventory, items, eating, drinking
     (X)         inventory frame
     (X)         inventory array in player code
     (X)         invisible blocks in inventory frame 
@@ -12,10 +12,10 @@
     (X)         right clicking grid item uses it directly then re-renders inventory grids
     (X)         quantity label on items with more than 1 qty
     (X)         info box on hover with a square
-    ( )     equipment, wearing shit, hud weapon models
-    ( )         player code has 18 equipment slots each assigned to a clickable square
-    ( )         wear() and unwear() functions that affect player stats and change weapon model onscreen
-    ( )         right clicking gear will put it on, right clicking a slot will try to empty it
+    (X)     equipment, wearing shit, hud weapon models
+    (X)         player code has 18 equipment slots each assigned to a clickable square
+    (X)         wear() and unwear() functions that affect player stats and change weapon model onscreen
+    (X)         right clicking gear will put it on, right clicking a slot will try to empty it
     ( )     spells, magic sheathing, casting 
     ( )     lootable enemies
     ( )     stat menu and skill menu

@@ -4,46 +4,43 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SlotCode : MonoBehaviour, IPointerDownHandler, IPointerUpHandler//, IPointerEnterHandler, IPointerExitHandler
+public class SlotCode : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public short item = 0;
     public GameObject InventorySystem;
-
-    /*void Start(){
-        Button btn = transform.GetComponent<Button>();  
-        btn.onClick.AddListener(send);
-    } deprecated*/
 
     public void OnPointerDown(PointerEventData pointerEventData){}
     public void OnPointerUp(PointerEventData pointerEventData){
         if(item != 0){
             if (pointerEventData.button == PointerEventData.InputButton.Right) {
-                InventorySystem.GetComponent<ItemList>().useItem(item);
+                if(gameObject.tag == "EquipSlot"){
+                    InventorySystem.GetComponent<ItemHandler>().Inventory[item].quantity++;
+                    GameObject.Find("Player").GetComponent<PlayerFunctions>().unwear(item);
+                    item = 0;
+                    InventorySystem.GetComponent<ItemHandler>().drawInventory();
+                } else {
+                    InventorySystem.GetComponent<ItemHandler>().useItem(item);
+                }
             }
         }
     }
 
     void Update(){
+        // label rendering code
+        byte i = 1; // not an equipslot
+        if(gameObject.tag == "EquipSlot"){
+            i = 0;
+        }
         if(item != 0){
             if((Input.mousePosition.x > transform.position.x-20) && (Input.mousePosition.x < transform.position.x+20) && 
                 (Input.mousePosition.y > transform.position.y-20) && (Input.mousePosition.y < transform.position.y+20)){
-                transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = InventorySystem.GetComponent<ItemList>().Inventory[item].name;
-                transform.GetChild(1).gameObject.SetActive(true);
+                transform.GetChild(i).GetComponent<UnityEngine.UI.Text>().text = InventorySystem.GetComponent<ItemHandler>().Inventory[item].name;
+                transform.GetChild(i).gameObject.SetActive(true);
             } else {
-                transform.GetChild(1).gameObject.SetActive(false);
+                transform.GetChild(i).gameObject.SetActive(false);
             }
         } else {
-            transform.GetChild(1).gameObject.SetActive(false);
+            transform.GetChild(i).gameObject.SetActive(false);
         }
     }
-    /*
-    public void OnPointerExit(PointerEventData pointerEventData){
-        NameLabel.SetActive(false);
-    }
-    public void OnPointerEnter(PointerEventData pointerEventData){
-        if(item != 0){
-            NameLabel.GetComponent<UnityEngine.UI.Text>().text = InventorySystem.GetComponent<ItemList>().Inventory[item].name;
-            NameLabel.SetActive(true);
-        }
-    }*/
 }

@@ -7,6 +7,7 @@ TagManager:
   - NPC
   - NPCSprite
   - InventSlot
+  - EquipSlot
   layers:
   - Default
   - TransparentFX

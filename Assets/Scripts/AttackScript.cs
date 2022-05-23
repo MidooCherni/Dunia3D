@@ -15,13 +15,14 @@ public class AttackScript : MonoBehaviour
     public GameObject player;
     public GameObject weapon;
 
-    public Sprite spr_idle;                             // TODO: Equip code will change these three
+    public Sprite spr_idle;
     public Sprite spr_pulled;
     public Sprite spr_recover;
 
     public Status status = Status.IDLE;
     public short attack_cd_CAP = 15;                 // TODO: FETCH FROM PLAYER ATTACK SPEED * 50 / 1000
     public short attack_cd = 15;
+    public int attack_value = 0;      // updated on buff gain or loss, debuff gain or loss, wear and unwear
 
     void Start()
     {
@@ -56,8 +57,8 @@ public class AttackScript : MonoBehaviour
                         if(hit.transform.gameObject.GetComponent<MobBehavior>().status != State.FLINCH && 
                             hit.transform.gameObject.GetComponent<MobBehavior>().status != State.DEAD){
                             // WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-                                    // TODO: make damage calculation code
-                            hit.transform.gameObject.GetComponent<StatHandler>().CURRENT_HP -= player.GetComponent<StatHandler>().STR;
+                                    // TODO: buff and debuff attack_value before calculation
+                            hit.transform.gameObject.GetComponent<StatHandler>().CURRENT_HP -= attack_value;
                             hit.transform.gameObject.GetComponent<MobBehavior>().status = State.FLINCH;
                         }
                     }

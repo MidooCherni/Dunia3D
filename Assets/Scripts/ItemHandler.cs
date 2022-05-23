@@ -13,13 +13,16 @@ public enum Type{
     READ,
     WEAPON,
     ARMOR,
+    AMMO,
     INGREDIENT,
     TOOL
 }
 public enum SubType{        // exclusively for weapons and armor
-    NONE,
+    NONE, EAR, RING, NECK, BACK, ARROW, BOLT, BULLET, OFF,  // TODO: offhand types
     FIST, STAFF, LPIERCE, HPIERCE, LSLASH, HSLASH, LBLUNT, HBLUNT, LGUN, HGUN, BOW, 
-    UNARMORED, LIGHTARMOR, HEAVYARMOR
+    UFACE, UHEAD, USHOULDER, UCHEST, ULEGS, UWAIST, UFEET, UHANDS, UWRIST,  // cloth
+    LFACE, LHEAD, LSHOULDER, LCHEST, LLEGS, LWAIST, LFEET, LHANDS, LWRIST,  // leathers/furs
+    HFACE, HHEAD, HSHOULDER, HCHEST, HLEGS, HWAIST, HFEET, HHANDS, HWRIST   // metal/mineral/bone
 }
 public enum Rarity{
     CURSED,
@@ -31,12 +34,11 @@ public enum Rarity{
     LEGENDARY
 }
 
-public class ItemList : MonoBehaviour
-{
-    public GameObject camera;
+public class ItemHandler : MonoBehaviour {
+    public GameObject cam;
     public GameObject InventoryMenu;
     public bool inventoryShown = false;
-
+    
     AudioClip clip_eat;
     AudioClip clip_drink;
     AudioClip clip_read;
@@ -125,12 +127,13 @@ public class ItemList : MonoBehaviour
     }
     public List<Item> Inventory = new List<Item>();
 
-    private void drawInventory(){
+    public void drawInventory(){
         if(inventoryShown){
             int itemSlot = 0;
+            // render inventory slots
             for(short i = 0; i < Inventory.Count; i++){
                 if(Inventory[i].quantity > 0){
-                    GameObject slot = InventoryMenu.gameObject.transform.GetChild(itemSlot+3).gameObject;
+                    GameObject slot = InventoryMenu.gameObject.transform.GetChild(3).GetChild(itemSlot).gameObject;
                     slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("Textures/Icons/" + Inventory[i].iconName);
                     slot.GetComponent<SlotCode>().item = i;
                     if(Inventory[i].quantity == 1){
@@ -141,12 +144,22 @@ public class ItemList : MonoBehaviour
                         slot.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = Inventory[i].quantity.ToString();
                     }
                     itemSlot++;
-                } else { InventoryMenu.gameObject.transform.GetChild(itemSlot+3).gameObject.GetComponent<SlotCode>().item = 0; }
-                for(int j = itemSlot+3; j < 39; j++){
-                        // TODO: just set that shit to inactive
-                    InventoryMenu.gameObject.transform.GetChild(j).gameObject.GetComponent<Image>().sprite = 
+                } else { InventoryMenu.gameObject.transform.GetChild(3).GetChild(itemSlot).gameObject.GetComponent<SlotCode>().item = 0; }
+                // render empty inventory slots
+                for(int j = itemSlot; j < 36; j++){
+                        // TODO: just set that shit to inactive bro
+                    InventoryMenu.gameObject.transform.GetChild(3).GetChild(j).gameObject.GetComponent<Image>().sprite = 
                         Resources.Load<Sprite>("Textures/Icons/empty");
-                    InventoryMenu.gameObject.transform.GetChild(j).GetChild(0).gameObject.SetActive(false);
+                    InventoryMenu.gameObject.transform.GetChild(3).GetChild(j).GetChild(0).gameObject.SetActive(false);
+                }
+            }
+            // render equipment slots
+            for(short i = 0; i < 18; i++){
+                GameObject slot = InventoryMenu.gameObject.transform.GetChild(4).GetChild(i).gameObject;
+                slot.SetActive(slot.GetComponent<SlotCode>().item != 0);
+                if(slot.GetComponent<SlotCode>().item != 0){
+                    slot.GetComponent<Image>().sprite = 
+                        Resources.Load<Sprite>("Textures/Icons/" + Inventory[slot.GetComponent<SlotCode>().item].iconName);
                 }
             }
         }
@@ -186,9 +199,11 @@ public class ItemList : MonoBehaviour
                     break;
                 case Type.WEAPON:
                 case Type.ARMOR:
+        // TODO: check if user can even wear it LMFAOOOOOOOO
                     Debug.Log("DEBUG: equipment worn");
                     GetComponent<AudioSource>().clip = clip_wear;
                     Inventory[id].quantity--;
+                    GetComponent<PlayerFunctions>().wear(id);
                     break;
                 case Type.INGREDIENT:
                     GetComponent<AudioSource>().clip = clip_eat;
@@ -215,7 +230,7 @@ public class ItemList : MonoBehaviour
         clip_wear = Resources.Load<AudioClip>("Sounds/clothes");
 
         Inventory.Add(new Item());  // Inventory[0] skip
-        Inventory.Add(new Item("rock", "a rock", Rarity.COMMON, Type.WEAPON, SubType.LBLUNT, "im doing a vidio with it", 0.0f, 0, 0, 0,
+        Inventory.Add(new Item("rock", "a rock", Rarity.COMMON, Type.WEAPON, SubType.LBLUNT, "im doing a vidio with it", 0.0f, 0, 5, 20,
                                 new string[]{"rock1", "rock2", "rock3"}));
         Inventory.Add(new Item("lean", "a mug of lean", Rarity.COMMON, Type.DRINK, "the drink of the gods", 0.0f, 0));
 
