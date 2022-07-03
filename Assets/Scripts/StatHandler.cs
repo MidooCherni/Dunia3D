@@ -4,6 +4,17 @@ using UnityEngine;
 
     // StatHandler.cs       a registry for all common values shared between the player and npcs
 
+enum Stats{
+    STR, CON, DEX, AGI, INT, WIS, RES_HOLY, RES_FIRE, RES_FROST, RES_ARCANE, RES_NATURE, RES_SHADOW
+}
+
+class Slot{
+    public short spellorigin;
+    public Stats stataffected;
+    public int magnitude;
+    public int timeleft;
+}
+
 public class StatHandler : MonoBehaviour
 {
         // string values
@@ -11,8 +22,8 @@ public class StatHandler : MonoBehaviour
     public string racename = "?";
     public string classname = "?";
     public string godname = "Faithless";
-    int[] buffs = {0};
-    int[] debuffs = {0};
+    Slot[] buffs = {0};
+    Slot[] debuffs = {0};
 
         // inventory ids for worn items
     // ear1 ear2 ring1 ring2 wrist1 wrist2 face head neck shoulders back chest hands waist legs feet weapon offhand

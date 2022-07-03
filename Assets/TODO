@@ -16,16 +16,38 @@
     (X)         player code has 18 equipment slots each assigned to a clickable square
     (X)         wear() and unwear() functions that affect player stats and change weapon model onscreen
     (X)         right clicking gear will put it on, right clicking a slot will try to empty it
-    ( )     spells, magic sheathing, casting 
+    (-)     spells, magic sheathing, casting 
+    (X)         player.equippedspell value
+    (X)         boolean spell isLearned value
+    (X)         spellFamily array that links to similar spells
+    (X)         spellbook that allows choosing equippedspell 
+    (X)         pressing 1-9 while hovering over a spell allows binding it 
+    ( )         pressing magic button or number attempts to cast equipped/bound spell
+    ( )         check for mana and player being in control and unsilenced (add flags in stathandler) 
+    ( )         Buff array in stat handler that has id, element, ticks (bool), and timeleft
+    ( )         if spell goes through, consume mana and Cast():
+    ( )             duration > 0, try to add a Buff. do not allow downgrading or stacking from the same family 
+    ( )             duration = 0, switch case through effecttype of each effect and Cast()
+    ( )         stat handler Update() tick down on all buff durations, remove them with Uncast(spell_id)
+    ( )             ExecuteTick() when remaining time on a HoT/DoT/crack is 0 or whenever is divisible by 300
+    ( )         spell scrolls that teach you spells
+    ( )     crosshair
+    ( )     add comabt sounds
     ( )     lootable enemies
+    ( )     interactable objects (chests doors zonedoors plants)
+    ( )     npcs, conversation menus, portraits
+    ( )     party members
     ( )     stat menu and skill menu
-    ( )     make all the skills functional (+weapon calculation fix)
     ( )     cursor dragging items and clickable paperdoll 
-    ( )     side icons for idle creatures
+    ( )     mob directions and face sprites
     ( )     simple pathfinding
     ( )     maps, loading areas
-    ( )     character creation, saving and loading
-    ( )     content...
+    ( )     character creation, races, classes, starter stats, saving and loading
+    ( )     hunger and thirst
+    ( )     item description on alt click
+    ( )     make all the skills functional (+weapon calculation fix and todo cleanup)
+    ( )     design a cleaner spellbook
+    ( )     actual game content
 
 
 

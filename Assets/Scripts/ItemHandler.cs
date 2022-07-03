@@ -144,7 +144,7 @@ public class ItemHandler : MonoBehaviour {
                         slot.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = Inventory[i].quantity.ToString();
                     }
                     itemSlot++;
-                } else { InventoryMenu.gameObject.transform.GetChild(3).GetChild(itemSlot).gameObject.GetComponent<SlotCode>().item = 0; }
+                } //else { InventoryMenu.gameObject.transform.GetChild(3).GetChild(itemSlot).gameObject.GetComponent<SlotCode>().item = 0; }
                 // render empty inventory slots
                 for(int j = itemSlot; j < 36; j++){
                         // TODO: just set that shit to inactive bro
@@ -224,25 +224,30 @@ public class ItemHandler : MonoBehaviour {
     }
 
     void Start(){
-        clip_eat = Resources.Load<AudioClip>("Sounds/eat");
-        clip_drink = Resources.Load<AudioClip>("Sounds/drink");
-        clip_read = Resources.Load<AudioClip>("Sounds/bookpag1");
-        clip_wear = Resources.Load<AudioClip>("Sounds/clothes");
+        clip_eat = Resources.Load<AudioClip>("Sounds/item/eat");
+        clip_drink = Resources.Load<AudioClip>("Sounds/item/drink");
+        clip_read = Resources.Load<AudioClip>("Sounds/item/bookpag1");
+        clip_wear = Resources.Load<AudioClip>("Sounds/item/clothes");
 
         Inventory.Add(new Item());  // Inventory[0] skip
         Inventory.Add(new Item("rock", "a rock", Rarity.COMMON, Type.WEAPON, SubType.LBLUNT, "im doing a vidio with it", 0.0f, 0, 5, 20,
                                 new string[]{"rock1", "rock2", "rock3"}));
         Inventory.Add(new Item("lean", "a mug of lean", Rarity.COMMON, Type.DRINK, "the drink of the gods", 0.0f, 0));
 
-        // TEST
+        // TEST     TODO: REMOVE!!!!!!!
         Inventory[1].quantity++;
         Inventory[2].quantity = 3;
     }
 
     void Update(){
         if(Input.GetKeyDown("b") || Input.GetKeyDown(KeyCode.Tab)){
+            GetComponent<SpellHandler>().spellBookShown = false;
+            GetComponent<SpellHandler>().spellbooksprite.SetActive(false);
             inventoryShown = !inventoryShown;
             InventoryMenu.SetActive(inventoryShown);
+            cam.GetComponent<MouseLook>().mouselook = !inventoryShown;
+            if(cam.GetComponent<MouseLook>().mouselook){ Cursor.lockState = CursorLockMode.Locked; }
+            else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
             drawInventory();
         }
     }

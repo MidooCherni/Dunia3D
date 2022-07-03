@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerFunctions : MonoBehaviour
 {
     public GameObject cam;
+    public GameObject weapon;
 
     public GameObject slot_ear1;
     public GameObject slot_ear2;
@@ -50,7 +51,7 @@ public class PlayerFunctions : MonoBehaviour
                 Resources.Load<Sprite>("Textures/Weapons/" + GetComponent<ItemHandler>().Inventory[item_id].w_sprites[1]);
             cam.GetComponent<AttackScript>().spr_recover = 
                 Resources.Load<Sprite>("Textures/Weapons/" + GetComponent<ItemHandler>().Inventory[item_id].w_sprites[2]);
-            GameObject.Find("Weapon").GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
+            weapon.GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
         } else {
             switch(GetComponent<ItemHandler>().Inventory[item_id].subtype){
                 case SubType.EAR:
@@ -154,7 +155,7 @@ public class PlayerFunctions : MonoBehaviour
                 Resources.Load<Sprite>("Textures/Weapons/fist2");
             cam.GetComponent<AttackScript>().spr_recover = 
                 Resources.Load<Sprite>("Textures/Weapons/fist3");
-            GameObject.Find("Weapon").GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
+            weapon.GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
         }
         GetComponent<StatHandler>().STR -= GetComponent<ItemHandler>().Inventory[item_id].buffs[0];
         GetComponent<StatHandler>().CON -= GetComponent<ItemHandler>().Inventory[item_id].buffs[1];

@@ -16,7 +16,7 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown("b")){
+        if(Input.GetKeyDown(KeyCode.LeftAlt)){
             mouselook = !mouselook;
             if(mouselook){ Cursor.lockState = CursorLockMode.Locked; }
             else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
