@@ -16956,6 +16956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -21711,6 +21712,7 @@ MonoBehaviour:
   cam: {fileID: 963194225}
   equippedSpell: 0
   spellBookShown: 0
+  hotbar: 0000000000000000000000000000000000000000
   bookopen: {fileID: 8300000, guid: 8b023630edd57ef4297dedaf575940b1, type: 3}
   pageflip: {fileID: 8300000, guid: 1db1c283bf3af9a44b11c006504067fe, type: 3}
   clip_casting: {fileID: 0}

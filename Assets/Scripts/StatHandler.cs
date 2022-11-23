@@ -10,8 +10,8 @@ enum Stats{
 
 class Slot{
     public short spellorigin;
-    public Stats stataffected;
-    public int magnitude;
+    public Stats[] statsaffected;
+    public int[] magnitudes;
     public int timeleft;
 }
 
@@ -22,8 +22,8 @@ public class StatHandler : MonoBehaviour
     public string racename = "?";
     public string classname = "?";
     public string godname = "Faithless";
-    Slot[] buffs = {0};
-    Slot[] debuffs = {0};
+    Slot[] buffs = {};
+    Slot[] debuffs = {};
 
         // inventory ids for worn items
     // ear1 ear2 ring1 ring2 wrist1 wrist2 face head neck shoulders back chest hands waist legs feet weapon offhand
@@ -58,31 +58,31 @@ public class StatHandler : MonoBehaviour
     public byte RES_NATURE = 0;   byte bRES_NATURE = 0;
     public byte RES_SHADOW = 0;   byte bRES_SHADOW = 0;
 
-    public void recalculateCaps(){      // TODO: CLEANER SHIT
+    public void recalculateCaps(){      // TODO: FIX MANA VALUES
         int hval;
         switch(classname){
             case "Warrior":
             case "Knight":
             case "Monk":
-                if(INT > WIS){ MAX_MP = (int)(LEVEL + INT) * 3; } else { MAX_MP = (int)(LEVEL + WIS) * 3; }
+                if(INT > WIS){ MAX_MP = (int)(LEVEL-1 + INT); } else { MAX_MP = (int)(LEVEL-1 + WIS); }
                 hval = 5;
                 break;
             case "Rogue":
             case "Bard":
             case "Ranger":
-                if(INT > WIS){ MAX_MP = (int)(LEVEL + INT) * 3; } else { MAX_MP = (int)(LEVEL + WIS) * 3; }
+                if(INT > WIS){ MAX_MP = (int)(LEVEL-1 + INT); } else { MAX_MP = (int)(LEVEL-1 + WIS); }
                 hval = 4;
                 break;
             case "Cleric":
             case "Druid":
             case "Shaman":
-                MAX_MP = (int)(LEVEL + WIS) * 10;
+                MAX_MP = (int)(WIS * (LEVEL + (LEVEL-1)));
                 hval = 3;
                 break;
             case "Wizard":
             case "Sorcerer":
             case "Necromancer":
-                MAX_MP = (int)(LEVEL + INT) * 10;
+                MAX_MP = (int)(INT * (LEVEL + (LEVEL-1)));
                 hval = 2;
                 break;
             default:

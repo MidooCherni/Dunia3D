@@ -22,9 +22,9 @@
     (X)         spellFamily array that links to similar spells
     (X)         spellbook that allows choosing equippedspell 
     (X)         pressing 1-9 while hovering over a spell allows binding it 
-    ( )         pressing magic button or number attempts to cast equipped/bound spell
+    (X)         pressing magic button or number attempts to cast equipped/bound spell
     ( )         check for mana and player being in control and unsilenced (add flags in stathandler) 
-    ( )         Buff array in stat handler that has id, element, ticks (bool), and timeleft
+    (X)         Buff array in stat handler that has id, element, ticks (bool), and timeleft
     ( )         if spell goes through, consume mana and Cast():
     ( )             duration > 0, try to add a Buff. do not allow downgrading or stacking from the same family 
     ( )             duration = 0, switch case through effecttype of each effect and Cast()
@@ -32,6 +32,7 @@
     ( )             ExecuteTick() when remaining time on a HoT/DoT/crack is 0 or whenever is divisible by 300
     ( )         spell scrolls that teach you spells
     ( )     crosshair
+    ( )     spell targeting
     ( )     add comabt sounds
     ( )     lootable enemies
     ( )     interactable objects (chests doors zonedoors plants)

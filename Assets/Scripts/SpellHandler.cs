@@ -5,15 +5,16 @@ using UnityEngine.UI;
 
 public enum School{
     NONE,
-    ALT,     // temporary stat buffs
+    ABJ,    // magical shield spells
+    ALT,    // temporary stat buffs
     CON,    // magical transport/summon
-    DIV,     // see invis, commune
-    EVO,      // energy and element nukes
-    ILL,       // niche stealth spells
-    NEC,     // health transferral
+    DIV,    // see invis, commune
+    EVO,    // energy and element nukes
+    ILL,    // niche stealth spells
+    NEC,    // health transferral
     RES,    // health restoration
-    TRA,  // object transformation
-    MUS           // bard only
+    TRA,    // object transformation
+    MUS     // bard only
 }
 public enum Ele{
     NONE,   // physical
@@ -22,10 +23,10 @@ public enum Ele{
         // +nature
     FIRE, LAVA,
         // +nature
-    NATURE, LIGHTNING, TOXIN, EARTH, WATER, 
-        // +arcane, +shadow
-    DEATH, VOID, CHAOS, SPIRIT,
-        // +frost, +fire, +holy
+    NATURE, LIGHTNING, EARTH, WATER, 
+        // +arcane, 
+    SHADOW, VOID, CHAOS, SPIRIT, DEATH,
+        // +frost, +fire, +holy, +nature
     HOLY, MOONLIGHT, SUNLIGHT, ASTRAL
         // +nature, +fire, +arcane
 }
@@ -41,7 +42,7 @@ public enum EffectType{
     CONJUREMOB, CONJUREITEM, TELEPORT, BIND, GATE, OPEN, EXTRAINVENTORY
 }
 public enum Target{
-    SELF, TOUCH, TARGET, PBAE, TAE, AOE
+    SELF, TOUCH, TARGET, PARTY, PBAE, TAE, AOE
 }
 
 public class SpellHandler : MonoBehaviour
@@ -49,6 +50,8 @@ public class SpellHandler : MonoBehaviour
     public GameObject spellbooksprite;
     public GameObject cam;
     public short equippedSpell = 0;
+    public short gcdCap = 50;           // 1 second spell delay
+    public short gcdTimer = 50;
     public bool spellBookShown = false;
 
     public short[] hotbar = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -92,26 +95,37 @@ public class SpellHandler : MonoBehaviour
             this.distance = di;
         }
     }
+    Effect n = new Effect();
+
     public class Spell{
         public string iconname = "";
         public string name = "";
         public byte level = 0;      // used to calculate mana cost
+        public bool requiresTarget = false;
         public Effect[] effects = {};
-        public short[] schoolFamily = {};
+        public short[] spellFamily = {};    // check if casting buff or debuff
         public bool isLearned = false;
         public Spell(){}
-        public Spell(string ic, string n, byte l, Effect[] ef){     // isolated spell
+        public Spell(string ic, string n, byte l, Effect[] ef){     // targetless
             this.iconname = ic;
             this.name = n;
             this.level = l;
             this.effects = ef;
         }
-        public Spell(string ic, string n, byte l, Effect[] ef, short[] sf){
+        public Spell(string ic, string n, byte l, Effect[] ef, bool rt){     // isolated spell
             this.iconname = ic;
             this.name = n;
             this.level = l;
             this.effects = ef;
-            this.schoolFamily = sf;
+            this.requiresTarget = rt;
+        }
+        public Spell(string ic, string n, byte l, Effect[] ef, bool rt, short[] sf){
+            this.iconname = ic;
+            this.name = n;
+            this.level = l;
+            this.effects = ef;
+            this.requiresTarget = rt;
+            this.spellFamily = sf;
         }
     }
     public List<Spell> SpellList = new List<Spell>();
@@ -136,24 +150,34 @@ public class SpellHandler : MonoBehaviour
         }
     }
 
-    public void performEffect(Effect eff, Target){
+/*    public void performEffect(Effect eff, Target){
 
-    }
+    }*/
 
     public void tryCast(short spellid){
-        if(spellid == 0){ return; } // TODO: tip to equip spell
-        // test gcd
-        // test mana
-        // test target
-        if(SpellList[spellid].effects[i].target == Target.SELF)
+            // TODO: place targeting system, test for IN_CONTROL and !SILENCED flags
+        if(spellid == 0){
+            Debug.Log("No spell equipped.");
+            return;
+        }
+        // test mana            TODO: WRITE PROPER FUCKING MANA COOOOOOOOOOOSTS
+        if(GetComponent<StatHandler>().CURRENT_MP < (SpellList[spellid].level * 10)){
+            Debug.Log("Out of mana.");
+            return;
+        }
+        if(gcdTimer > 0){
+            Debug.Log("I can't cast that yet.");
+            return;
+        }
+        gcdTimer = gcdCap;
         // hand animation
-        // play sound
+        Debug.Log("TODO: ADD CASTING ANIMATION, PLAY SFX");
         // for loop through effects
         for(int i = 0; i < 4; i++){
             if(SpellList[spellid].effects[i] != n){
                 switch(SpellList[spellid].effects[i].type){
                     case EffectType.NUKE:
-                        if(SpellList[spellid].effects[i].target == Target.SELF)
+                        if(SpellList[spellid].effects[i].target == Target.SELF){}
                         break;
                     case EffectType.HEAL:
                         break;
@@ -166,8 +190,6 @@ public class SpellHandler : MonoBehaviour
     }
 
     void Start(){
-        Effect n = new Effect();
-
         SpellList.Add(new Spell());  // Inventory[0] skip
         SpellList.Add(new Spell("fire", "test fireball", 1,
                             new Effect[]{new Effect(Ele.FIRE, EffectType.NUKE, School.EVO, Target.TARGET, 10, 0, 20),n,n,n}));
@@ -199,5 +221,10 @@ public class SpellHandler : MonoBehaviour
                 tryCast(equippedSpell);
             }
         }
+    }
+
+    void FixedUpdate(){
+            // gcd handling
+        if (gcdTimer != gcdCap){ gcdTimer++; }
     }
 }
