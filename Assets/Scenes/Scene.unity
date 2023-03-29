@@ -11893,10 +11893,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1600, y: 900}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -15657,7 +15657,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1070, y: 650}
+  m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1478587589
 MonoBehaviour:
@@ -21527,7 +21527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charname: '?'
   racename: '?'
-  classname: '?'
+  classname: Knight
   godname: Faithless
   CURRENT_HP: 1
   CURRENT_MP: 0
@@ -21709,8 +21709,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellbooksprite: {fileID: 1772848316}
   cam: {fileID: 963194225}
+  player: {fileID: 2040129266}
+  weapon: {fileID: 1478587587}
   equippedSpell: 0
   spellBookShown: 0
+  magic_gcd_cap: 50
+  magic_gcd: 50
+  hotbar: 0000000000000000000000000000000000000000
+  spr_firecast: {fileID: 21300000, guid: 01c374bdce2e178489e7c3df7776105f, type: 3}
+  spr_frostcast: {fileID: 21300000, guid: 17e90a6a82db1f842a3b0ce9dab89fe4, type: 3}
+  spr_arcanecast: {fileID: 21300000, guid: 775aa5d026bab024cbfd08c3085d7ad4, type: 3}
+  spr_naturecast: {fileID: 21300000, guid: ad6dbcd77ff0bc5449c3e663ae252fd5, type: 3}
+  spr_thundercast: {fileID: 21300000, guid: 9f5110c50ff7853469746e41b0054d9d, type: 3}
+  spr_watercast: {fileID: 21300000, guid: 05aa63f392b3ea14f883f986d9fd0cbf, type: 3}
+  spr_shadowcast: {fileID: 21300000, guid: 299a0368134cc074e86d26e3d4a5502e, type: 3}
+  spr_holycast: {fileID: 21300000, guid: 43461258b0234c345b3f55c4ba28be8a, type: 3}
+  spr_lightcast: {fileID: 21300000, guid: 73457bb3f52873b42bb36b4574989ec8, type: 3}
+  spr_mooncast: {fileID: 21300000, guid: cb8469eb1bfe7a44e82c6d316b154a5f, type: 3}
   bookopen: {fileID: 8300000, guid: 8b023630edd57ef4297dedaf575940b1, type: 3}
   pageflip: {fileID: 8300000, guid: 1db1c283bf3af9a44b11c006504067fe, type: 3}
   clip_casting: {fileID: 0}

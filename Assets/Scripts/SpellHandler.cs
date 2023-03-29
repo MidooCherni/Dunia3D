@@ -41,17 +41,34 @@ public enum EffectType{
     CONJUREMOB, CONJUREITEM, TELEPORT, BIND, GATE, OPEN, EXTRAINVENTORY
 }
 public enum Target{
-    SELF, TOUCH, TARGET, PBAE, TAE, AOE
+    SELF, TOUCH, TARGET, PBAE, TAE, AOE, PARTY
 }
 
 public class SpellHandler : MonoBehaviour
 {
     public GameObject spellbooksprite;
     public GameObject cam;
+    public GameObject player;
+    public GameObject weapon;
+
     public short equippedSpell = 0;
     public bool spellBookShown = false;
 
+    public short magic_gcd_cap = 15;
+    public short magic_gcd = 15;
+
     public short[] hotbar = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    public Sprite spr_firecast;
+    public Sprite spr_frostcast;
+    public Sprite spr_arcanecast;
+    public Sprite spr_naturecast;
+    public Sprite spr_thundercast;
+    public Sprite spr_watercast;
+    public Sprite spr_shadowcast;
+    public Sprite spr_holycast;
+    public Sprite spr_lightcast;
+    public Sprite spr_mooncast;
 
     public AudioClip bookopen;
     public AudioClip pageflip;
@@ -136,31 +153,85 @@ public class SpellHandler : MonoBehaviour
         }
     }
 
-    public void performEffect(Effect eff, Target){
-
-    }
-
     public void tryCast(short spellid){
         if(spellid == 0){ return; } // TODO: tip to equip spell
-        // test gcd
-        // test mana
-        // test target
-        if(SpellList[spellid].effects[i].target == Target.SELF)
-        // hand animation
-        // play sound
-        // for loop through effects
-        for(int i = 0; i < 4; i++){
-            if(SpellList[spellid].effects[i] != n){
-                switch(SpellList[spellid].effects[i].type){
-                    case EffectType.NUKE:
-                        if(SpellList[spellid].effects[i].target == Target.SELF)
-                        break;
-                    case EffectType.HEAL:
-                        break;
-                    default:
-                    // bug
-                        break;
+        if(cam.GetComponent<AttackScript>().attack_cd < cam.GetComponent<AttackScript>().attack_cd_CAP){ return; }
+        if(magic_gcd < magic_gcd_cap){ return; }
+            // test and consume mana
+        if(GetComponent<StatHandler>().CURRENT_MP < SpellList[spellid].level*10){ return; } // TODO: NOOOOOOOO LMFAOOOOOOOOOOOOO CHANGE THIS SHIT ASAP
+        GetComponent<StatHandler>().CURRENT_MP -= SpellList[spellid].level*10;
+            // change icon
+        weapon.SetActive(true);
+        switch(SpellList[spellid].effects[0].element){
+            case Ele.FIRE:
+            case Ele.LAVA:
+                weapon.GetComponent<Image>().sprite = spr_firecast;
+                break;
+            case Ele.FROST:
+            case Ele.AIR:
+                weapon.GetComponent<Image>().sprite = spr_frostcast;
+                break;
+            case Ele.ARCANE:
+            case Ele.FORCE:
+            case Ele.ASTRAL:
+                weapon.GetComponent<Image>().sprite = spr_arcanecast;
+                break;
+            case Ele.NATURE:
+            case Ele.TOXIN:
+            case Ele.EARTH:
+                weapon.GetComponent<Image>().sprite = spr_naturecast;
+                break;
+            case Ele.LIGHTNING:
+                weapon.GetComponent<Image>().sprite = spr_thundercast;
+                break;
+            case Ele.WATER:
+                weapon.GetComponent<Image>().sprite = spr_watercast;
+                break;
+            case Ele.DEATH:
+            case Ele.VOID:
+            case Ele.CHAOS:
+            case Ele.SPIRIT:
+                weapon.GetComponent<Image>().sprite = spr_shadowcast;
+                break;
+            case Ele.HOLY:
+                weapon.GetComponent<Image>().sprite = spr_holycast;
+                break;
+            case Ele.MOONLIGHT:
+                weapon.GetComponent<Image>().sprite = spr_mooncast;
+                break;
+            case Ele.SUNLIGHT:
+                weapon.GetComponent<Image>().sprite = spr_lightcast;
+                break;
+            case Ele.NONE:
+            default:
+                break;
+        }
+            // trigger cds
+        cam.GetComponent<AttackScript>().status = Status.RECOVER;
+        cam.GetComponent<AttackScript>().attack_cd = 0;
+        magic_gcd = 0;
+            // test target and perform
+        foreach(Effect f in SpellList[spellid].effects){
+            List<GameObject> targets = new List<GameObject>();
+            if (f.target == Target.SELF){ targets.Add(player); }
+            else if (f.target == Target.TOUCH){
+                RaycastHit hit;
+                if(Physics.Raycast(player.transform.position, player.transform.forward, out hit, 6.0f)){
+                    if(hit.transform.gameObject.tag == "NPC"){ 
+                        targets.Add(hit.transform.gameObject);
+                    }
                 }
+            }
+            else if (f.target == Target.TARGET){
+                RaycastHit hit;
+                if(Physics.Raycast(player.transform.position, player.transform.forward, out hit, 40.0f)){
+                    if(hit.transform.gameObject.tag == "NPC"){ 
+                        targets.Add(hit.transform.gameObject);
+                    }
+                }
+            } // TODO: aoe spells
+            foreach(GameObject target in targets){ 
+                Debug.Log("performing effect " + f);
             }
         }
     }
@@ -179,6 +250,19 @@ public class SpellHandler : MonoBehaviour
         SpellList[2].isLearned = true;
     }
 
+    void FixedUpdate(){
+        if(cam.GetComponent<AttackScript>().status == Status.RECOVER && magic_gcd != magic_gcd_cap){ magic_gcd++; }
+        if(cam.GetComponent<AttackScript>().status == Status.RECOVER && magic_gcd == magic_gcd_cap){
+            cam.GetComponent<AttackScript>().status = Status.IDLE;
+            if(cam.GetComponent<AttackScript>().unsheathed){
+                weapon.GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
+            } else {
+                weapon.SetActive(false);
+            }
+        }
+        if(cam.GetComponent<AttackScript>().status == Status.IDLE && magic_gcd != magic_gcd_cap){ magic_gcd++; }
+    }
+
     void Update(){
             // open spellbook
         if(Input.GetKeyDown("a")){
@@ -192,6 +276,14 @@ public class SpellHandler : MonoBehaviour
             if(cam.GetComponent<MouseLook>().mouselook){ Cursor.lockState = CursorLockMode.Locked; }
             else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
             drawSpellbook();
+        }
+            // change spell
+        for(int i = 0; i < 9; i++){
+            if(Input.GetKeyDown(((i+1)%10).ToString())){
+                if(hotbar[i] != 0){
+                    equippedSpell = hotbar[i];
+                }
+            }
         }
             // cast equipped spell
         if(Input.GetKeyDown("r")){

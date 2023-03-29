@@ -22,8 +22,8 @@ public class StatHandler : MonoBehaviour
     public string racename = "?";
     public string classname = "?";
     public string godname = "Faithless";
-    Slot[] buffs = {0};
-    Slot[] debuffs = {0};
+    Slot[] buffs = {};
+    Slot[] debuffs = {};
 
         // inventory ids for worn items
     // ear1 ear2 ring1 ring2 wrist1 wrist2 face head neck shoulders back chest hands waist legs feet weapon offhand

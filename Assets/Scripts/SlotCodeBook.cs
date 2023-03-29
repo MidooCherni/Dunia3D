@@ -39,35 +39,10 @@ public class SlotCodeBook : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             if((Input.mousePosition.x > transform.position.x-20) && (Input.mousePosition.x < transform.position.x+20) && 
                 (Input.mousePosition.y > transform.position.y-20) && (Input.mousePosition.y < transform.position.y+20)){
                     // TODO: FIX THIS YANDEREDEV ASS SHIT LMAOOOOOOOOOOOO
-                if(Input.GetKeyDown("1")){
-                    hotkeySpell(0);
-                }
-                if(Input.GetKeyDown("2")){
-                    hotkeySpell(1);
-                }
-                if(Input.GetKeyDown("3")){
-                    hotkeySpell(2);
-                }
-                if(Input.GetKeyDown("4")){
-                    hotkeySpell(3);
-                }
-                if(Input.GetKeyDown("5")){
-                    hotkeySpell(4);
-                }
-                if(Input.GetKeyDown("6")){
-                    hotkeySpell(5);
-                }
-                if(Input.GetKeyDown("7")){
-                    hotkeySpell(6);
-                }
-                if(Input.GetKeyDown("8")){
-                    hotkeySpell(7);
-                }
-                if(Input.GetKeyDown("9")){
-                    hotkeySpell(8);
-                }
-                if(Input.GetKeyDown("0")){
-                    hotkeySpell(9);
+                for(byte i = 0; i < 9; i++){
+                    if(Input.GetKeyDown(((i+1)%10).ToString())){
+                        hotkeySpell(i);
+                    }
                 }
             }
         }

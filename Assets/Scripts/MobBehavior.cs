@@ -20,6 +20,7 @@ public class MobBehavior : MonoBehaviour
     public float movespeed = 4.0f;
     byte attackdelay_max = 150;      // 50 = 1 second... last 1/4th 
     byte attackdelay = 150;                 // ATTACK ANIM: 0-50%, idle sprite, 50-75% windup, 75% = do damage, 75-100% recovery
+        // TODO: add magic delay
 
     public Sprite spr_idle;
     public Sprite spr_walk1;
@@ -57,7 +58,7 @@ public class MobBehavior : MonoBehaviour
                 sr.GetComponent<SpriteRenderer>().sprite = spr_wind;
             } else if ((float)attackdelay / (float)attackdelay_max >= 0.90f){
                 sr.GetComponent<SpriteRenderer>().sprite = spr_strike;
-                // DO DAMAGE HERE!!!!!!
+                // TODO: DO DAMAGE HERE!!!!!!
                 status = State.RECOVER;
             }
             attackdelay++;

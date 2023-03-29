@@ -26,6 +26,7 @@ public class AttackScript : MonoBehaviour
 
     void Start()
     {
+        weapon.GetComponent<Image>().sprite = spr_idle;
         if(unsheathed){
             weapon.SetActive(true);
         } else {
@@ -37,14 +38,19 @@ public class AttackScript : MonoBehaviour
         if(status == Status.RECOVER && attack_cd != attack_cd_CAP){ attack_cd++; }
         if(status == Status.RECOVER && attack_cd == attack_cd_CAP){
             status = Status.IDLE;
-            weapon.GetComponent<Image>().sprite = spr_idle;
+            if(unsheathed){
+                weapon.GetComponent<Image>().sprite = spr_idle;
+            } else {
+                weapon.SetActive(false);
+            }
         }
+        if(status == Status.IDLE && attack_cd != attack_cd_CAP){ attack_cd++; }
     }
 
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){
-            if(status == Status.IDLE){
+            if(status == Status.IDLE && (unsheathed)){
                 status = Status.PULL;
                 weapon.GetComponent<Image>().sprite = spr_pulled;
             }
@@ -66,6 +72,7 @@ public class AttackScript : MonoBehaviour
                 weapon.GetComponent<Image>().sprite = spr_recover;
                 status = Status.RECOVER;
                 attack_cd = 0;
+                player.GetComponent<SpellHandler>().magic_gcd = 0;
             }
         }
         if(Input.GetKeyDown("f")){

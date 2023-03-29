@@ -9,18 +9,18 @@ public class BarHandler : MonoBehaviour
     public RectTransform mpbar;
     public RectTransform spbar;
 
-    private int cMAX_HP;
-    private int cMAX_MP;
-    private int cMAX_SP;
+    private float cMAX_HP;
+    private float cMAX_MP;
+    private float cMAX_SP;
 
     void Update()
     {
             // setting max to 1 if at 0 to avoid dividing by zero
-        cMAX_HP = ps.GetComponent<StatHandler>().CURRENT_HP; if (cMAX_HP < 1) { cMAX_HP = 1; }
-        cMAX_MP = ps.GetComponent<StatHandler>().CURRENT_MP; if (cMAX_MP < 1) { cMAX_MP = 1; }
-        cMAX_SP = ps.GetComponent<StatHandler>().CURRENT_SP; if (cMAX_SP < 1) { cMAX_SP = 1; }
-        hpbar.sizeDelta = new Vector2(ps.GetComponent<StatHandler>().MAX_HP / cMAX_HP * 400, 15);
-        mpbar.sizeDelta = new Vector2(ps.GetComponent<StatHandler>().MAX_MP / cMAX_MP * 400, 15);
-        spbar.sizeDelta = new Vector2(ps.GetComponent<StatHandler>().MAX_SP / cMAX_SP * 400, 15);
+        cMAX_HP = (float)ps.GetComponent<StatHandler>().CURRENT_HP; if (cMAX_HP < 1) { cMAX_HP = 1; }
+        cMAX_MP = (float)ps.GetComponent<StatHandler>().CURRENT_MP; if (cMAX_MP < 1) { cMAX_MP = 1; }
+        cMAX_SP = (float)ps.GetComponent<StatHandler>().CURRENT_SP; if (cMAX_SP < 1) { cMAX_SP = 1; }
+        hpbar.sizeDelta = new Vector2((cMAX_HP / (float)ps.GetComponent<StatHandler>().MAX_HP) * 400, 15);
+        mpbar.sizeDelta = new Vector2((cMAX_MP / (float)ps.GetComponent<StatHandler>().MAX_MP) * 400, 15);
+        spbar.sizeDelta = new Vector2((cMAX_SP / (float)ps.GetComponent<StatHandler>().MAX_SP) * 400, 15);
     }
 }
