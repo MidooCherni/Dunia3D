@@ -30,6 +30,5 @@ public class SkillHandler : MonoBehaviour
         byte Necromancy = 0;       
         byte Restoration = 0;      
         byte Transmutation = 0;    
-        byte Musicianship = 0;     
-        byte Singing = 0; */
+        byte Musicianship = 0; */
 }
