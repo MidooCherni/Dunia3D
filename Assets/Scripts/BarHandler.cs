@@ -1,3 +1,4 @@
+using System.IO.Pipes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class BarHandler : MonoBehaviour
     public RectTransform hpbar;
     public RectTransform mpbar;
     public RectTransform spbar;
+
+    public GameObject spelllabel;
 
     private float cMAX_HP;
     private float cMAX_MP;

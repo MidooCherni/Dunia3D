@@ -8,12 +8,14 @@ public class SlotCodeBook : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 {
     public short spell = 0;
     public GameObject SpellSystem;
+    public GameObject magiclabel;
 
     public void OnPointerDown(PointerEventData pointerEventData){}
     public void OnPointerUp(PointerEventData pointerEventData){
         if(spell != 0){
             if (pointerEventData.button == PointerEventData.InputButton.Left) {
                 SpellSystem.GetComponent<SpellHandler>().equippedSpell = spell;
+                magiclabel.GetComponent<UnityEngine.UI.Text>().text = SpellSystem.GetComponent<SpellHandler>().SpellList[spell].name;
             }
         }
     }
@@ -31,6 +33,14 @@ public class SlotCodeBook : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             SpellSystem.GetComponent<SpellHandler>().hotbar[num] = spell;
         }
         SpellSystem.GetComponent<SpellHandler>().drawSpellbook();
+    }
+
+    void Start(){
+        if(SpellSystem.GetComponent<SpellHandler>().equippedSpell == 0){
+            magiclabel.GetComponent<UnityEngine.UI.Text>().text = "No spell prepared";
+        } else {
+            magiclabel.GetComponent<UnityEngine.UI.Text>().text = SpellSystem.GetComponent<SpellHandler>().SpellList[SpellSystem.GetComponent<SpellHandler>().equippedSpell].name;
+        }
     }
 
     void Update(){

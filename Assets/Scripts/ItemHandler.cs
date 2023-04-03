@@ -43,6 +43,8 @@ public class ItemHandler : MonoBehaviour {
     AudioClip clip_drink;
     AudioClip clip_read;
     AudioClip clip_wear;
+    AudioClip clip_book;
+    AudioClip clip_scroll;
 
     public class Item{
         public string iconName = "";
@@ -170,52 +172,50 @@ public class ItemHandler : MonoBehaviour {
             switch(Inventory[id].type){
                 case Type.FOOD:
                     GetComponent<AudioSource>().clip = clip_eat;
-                    Debug.Log("DEBUG: hunger sated");
                     Inventory[id].quantity--;
                     break;
                 case Type.DRINK:
                     GetComponent<AudioSource>().clip = clip_drink;
-                    Debug.Log("DEBUG: thirst quenched");
                     Inventory[id].quantity--;
                     break;
                 case Type.SCROLL:
-                    Debug.Log("DEBUG: scroll casted");
-                    GetComponent<AudioSource>().clip = clip_read;
+                    GetComponent<AudioSource>().clip = clip_scroll;
                     Inventory[id].quantity--;
+                    GetComponent<SpellHandler>().tryCast((short)Inventory[id].onUse);
                     break;
                 case Type.POTION:
-                    Debug.Log("DEBUG: potion effect used");
                     GetComponent<AudioSource>().clip = clip_drink;
                     Inventory[id].quantity--;
+                    GetComponent<SpellHandler>().tryCast((short)Inventory[id].onUse);
                     break;
                 case Type.SPELL:
-                    Debug.Log("DEBUG: spell learned");
-                    GetComponent<AudioSource>().clip = clip_read;
-                    Inventory[id].quantity--;
+                    GetComponent<AudioSource>().clip = clip_book;
+                    if(!GetComponent<SpellHandler>().SpellList[(short)Inventory[id].onUse].isLearned){
+                        Inventory[id].quantity--;
+                        GetComponent<SpellHandler>().SpellList[(short)Inventory[id].onUse].isLearned = true;
+                    } else {
+                        Debug.Log("DEBUG: spell already known");
+                    }
                     break;
                 case Type.READ:
-                    Debug.Log("DEBUG: reading menu");
                     GetComponent<AudioSource>().clip = clip_read;
                     break;
                 case Type.WEAPON:
                 case Type.ARMOR:
         // TODO: check if user can even wear it LMFAOOOOOOOO
-                    Debug.Log("DEBUG: equipment worn");
                     GetComponent<AudioSource>().clip = clip_wear;
                     Inventory[id].quantity--;
                     GetComponent<PlayerFunctions>().wear(id);
                     break;
                 case Type.INGREDIENT:
                     GetComponent<AudioSource>().clip = clip_eat;
-                    Debug.Log("DEBUG: ingredient eaten");
                     Inventory[id].quantity--;
+                    GetComponent<SpellHandler>().tryCast((short)Inventory[id].onUse);
                     break;
                 case Type.TOOL:
-                    Debug.Log("DEBUG: crafting menu opened");
                     GetComponent<AudioSource>().clip = clip_wear;
                     break;
                 default:
-                    Debug.Log("DEBUG: consumed unknown item type");
                     break;
             }
             GetComponent<AudioSource>().Play();
@@ -228,15 +228,21 @@ public class ItemHandler : MonoBehaviour {
         clip_drink = Resources.Load<AudioClip>("Sounds/item/drink");
         clip_read = Resources.Load<AudioClip>("Sounds/item/bookpag1");
         clip_wear = Resources.Load<AudioClip>("Sounds/item/clothes");
+        clip_book = Resources.Load<AudioClip>("Sounds/item/readbook");
+        clip_scroll = Resources.Load<AudioClip>("Sounds/item/readscroll");
 
         Inventory.Add(new Item());  // Inventory[0] skip
         Inventory.Add(new Item("rock", "a rock", Rarity.COMMON, Type.WEAPON, SubType.LBLUNT, "im doing a vidio with it", 0.0f, 0, 5, 20,
                                 new string[]{"rock1", "rock2", "rock3"}));
         Inventory.Add(new Item("lean", "a mug of lean", Rarity.COMMON, Type.DRINK, "the drink of the gods", 0.0f, 0));
+        Inventory.Add(new Item("scroll", "a scroll of regeneration", Rarity.COMMON, Type.SCROLL, "Casts \"Regeneration\" when read.", 0.0f, 0, 3, 1));
+        Inventory.Add(new Item("book", "a healing book", Rarity.COMMON, Type.SPELL, "Teaches \"test healing\" when read.", 0.0f, 0, 2, 1));
 
         // TEST     TODO: REMOVE!!!!!!!
         Inventory[1].quantity++;
         Inventory[2].quantity = 3;
+        Inventory[3].quantity++;
+        Inventory[4].quantity++;
     }
 
     void Update(){

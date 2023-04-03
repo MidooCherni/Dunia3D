@@ -8,6 +8,8 @@ public class PlayerFunctions : MonoBehaviour
     public GameObject cam;
     public GameObject weapon;
 
+    public GameObject weaponlabel;
+
     public GameObject slot_ear1;
     public GameObject slot_ear2;
     public GameObject slot_ring1;
@@ -44,6 +46,27 @@ public class PlayerFunctions : MonoBehaviour
                 slot_weapon.GetComponent<SlotCode>().item = 0;
             }
             slot_weapon.GetComponent<SlotCode>().item = item_id;
+
+            switch(GetComponent<ItemHandler>().Inventory[item_id].subtype){
+                case SubType.FIST:
+                    cam.GetComponent<AttackScript>().snd_hit = cam.GetComponent<AttackScript>().snd_punch;
+                    break;
+                case SubType.STAFF:
+                case SubType.LBLUNT:
+                case SubType.HBLUNT:
+                    cam.GetComponent<AttackScript>().snd_hit = cam.GetComponent<AttackScript>().snd_blunt;
+                    break;
+                case SubType.LPIERCE:
+                case SubType.HPIERCE:
+                case SubType.LSLASH:
+                case SubType.HSLASH:
+                    cam.GetComponent<AttackScript>().snd_hit = cam.GetComponent<AttackScript>().snd_blade;
+                    break;
+                default:
+                    cam.GetComponent<AttackScript>().snd_hit = cam.GetComponent<AttackScript>().snd_punch;
+                    break;
+                // TODO: ranged eapons
+            }
             
             cam.GetComponent<AttackScript>().spr_idle = 
                 Resources.Load<Sprite>("Textures/Weapons/" + GetComponent<ItemHandler>().Inventory[item_id].w_sprites[0]);
@@ -52,6 +75,7 @@ public class PlayerFunctions : MonoBehaviour
             cam.GetComponent<AttackScript>().spr_recover = 
                 Resources.Load<Sprite>("Textures/Weapons/" + GetComponent<ItemHandler>().Inventory[item_id].w_sprites[2]);
             weapon.GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
+            weaponlabel.GetComponent<UnityEngine.UI.Text>().text = GetComponent<ItemHandler>().Inventory[slot_weapon.GetComponent<SlotCode>().item].name;
         } else {
             switch(GetComponent<ItemHandler>().Inventory[item_id].subtype){
                 case SubType.EAR:
@@ -149,6 +173,7 @@ public class PlayerFunctions : MonoBehaviour
 
     public void unwear(short item_id){
         if(GetComponent<ItemHandler>().Inventory[item_id].type == Type.WEAPON){
+            cam.GetComponent<AttackScript>().snd_hit = cam.GetComponent<AttackScript>().snd_punch;
             cam.GetComponent<AttackScript>().spr_idle = 
                 Resources.Load<Sprite>("Textures/Weapons/fist1");
             cam.GetComponent<AttackScript>().spr_pulled = 
@@ -156,6 +181,7 @@ public class PlayerFunctions : MonoBehaviour
             cam.GetComponent<AttackScript>().spr_recover = 
                 Resources.Load<Sprite>("Textures/Weapons/fist3");
             weapon.GetComponent<Image>().sprite = cam.GetComponent<AttackScript>().spr_idle;
+            weaponlabel.GetComponent<UnityEngine.UI.Text>().text = "Fists";
         }
         GetComponent<StatHandler>().STR -= GetComponent<ItemHandler>().Inventory[item_id].buffs[0];
         GetComponent<StatHandler>().CON -= GetComponent<ItemHandler>().Inventory[item_id].buffs[1];
@@ -183,5 +209,10 @@ public class PlayerFunctions : MonoBehaviour
     public void Start(){
             // TODO: nooooooo lmfaoooooo
         cam.GetComponent<AttackScript>().attack_value = GetComponent<StatHandler>().STR;
+        if(slot_weapon.GetComponent<SlotCode>().item == 0){
+            weaponlabel.GetComponent<UnityEngine.UI.Text>().text = "Fists";
+        } else {
+            weaponlabel.GetComponent<UnityEngine.UI.Text>().text = GetComponent<ItemHandler>().Inventory[slot_weapon.GetComponent<SlotCode>().item].name;
+        }
     }
 }

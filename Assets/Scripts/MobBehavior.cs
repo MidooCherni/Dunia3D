@@ -39,46 +39,93 @@ public class MobBehavior : MonoBehaviour
     byte animcounter = 0;        // used to time walk cycles out of 25 (50 frames = 1 sec)
     bool step = false;           // single byte to decide current walk sprite 
     public byte flinchtimer = 20;
+    public byte flashtimer = 0;
+    public Ele flashcolor = Ele.NONE;
 
     void FixedUpdate(){
+        if(flashtimer % 2 == 1){
+            switch(flashcolor){
+                case Ele.ARCANE:
+                case Ele.ASTRAL:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(1, 0, 1, 1f);
+                    break;
+                case Ele.FROST:
+                case Ele.AIR:
+                case Ele.LIGHTNING:
+                case Ele.WATER:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(0, 0, 1, 1f);
+                    break;
+                case Ele.FIRE:
+                case Ele.LAVA:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1f);
+                    break;
+                case Ele.NATURE:
+                case Ele.EARTH:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(0, 0.75f, 0, 1f);
+                    break;
+                case Ele.SHADOW:
+                case Ele.VOID:
+                case Ele.CHAOS:
+                case Ele.SPIRIT:
+                case Ele.DEATH:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0, 0.5f, 1f);
+                    break;
+                case Ele.HOLY:
+                case Ele.SUNLIGHT:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(1, 1, 0, 1f);
+                    break;
+                case Ele.MOONLIGHT:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 1f);
+                    break;
+                case Ele.FORCE:
+                default:
+                    sr.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
+                    break;
+            }
+        } else {
+            sr.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
+        }
+        if(flashtimer > 0){ flashtimer--; }
+
         switch(status){
-        case State.WANDER:
-        case State.CHASE:
-        case State.RETURN:
-            animcounter++;
-            if(animcounter == 10){
-                animcounter = 0;
-                step = !step;
-            }
-            break;
-        case State.WINDUP:
-            if((float)attackdelay / (float)attackdelay_max < 0.5f){
-                sr.GetComponent<SpriteRenderer>().sprite = spr_idle;
-            } else if ((float)attackdelay / (float)attackdelay_max < 0.90f){
-                sr.GetComponent<SpriteRenderer>().sprite = spr_wind;
-            } else if ((float)attackdelay / (float)attackdelay_max >= 0.90f){
-                sr.GetComponent<SpriteRenderer>().sprite = spr_strike;
-                // TODO: DO DAMAGE HERE!!!!!!
-                status = State.RECOVER;
-            }
-            attackdelay++;
-            break;
-        case State.RECOVER:
-            attackdelay++;
-            if(attackdelay == attackdelay_max){
-                attackdelay = 0;
-                status = State.WINDUP;
-            }
-            break;
-        case State.FLINCH:
-            flinchtimer--;
-            if(flinchtimer == 0){
-                flinchtimer = 20;
-                status = State.IDLE;
-            }
-            break;
-        default:
-            break;
+            case State.WANDER:
+            case State.CHASE:
+            case State.RETURN:
+                animcounter++;
+                if(animcounter == 10){
+                    animcounter = 0;
+                    step = !step;
+                }
+                break;
+            case State.WINDUP:
+                if((float)attackdelay / (float)attackdelay_max < 0.5f){
+                    sr.GetComponent<SpriteRenderer>().sprite = spr_idle;
+                } else if ((float)attackdelay / (float)attackdelay_max < 0.90f){
+                    sr.GetComponent<SpriteRenderer>().sprite = spr_wind;
+                } else if ((float)attackdelay / (float)attackdelay_max >= 0.90f){
+                    sr.GetComponent<SpriteRenderer>().sprite = spr_strike;
+                    // TODO: CHANGE DAMAGE CHECK TO INCLUDE ARMOR EFFECTS!!!!!!       TODO: DEATH CODE
+                    player.GetComponent<StatHandler>().CURRENT_HP -= GetComponent<StatHandler>().STR;
+                    status = State.RECOVER;
+                }
+                attackdelay++;
+                break;
+            case State.RECOVER:
+                attackdelay++;
+                if(attackdelay == attackdelay_max){
+                    attackdelay = 0;
+                    status = State.WINDUP;
+                }
+                break;
+            case State.FLINCH:
+                flinchtimer--;
+                if(flinchtimer == 0){
+                    flinchtimer = 20;
+                    status = State.IDLE;
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -111,7 +158,7 @@ public class MobBehavior : MonoBehaviour
                     sr.GetComponent<SpriteRenderer>().sprite = spr_walk1;
                 } else {
                     sr.GetComponent<SpriteRenderer>().sprite = spr_walk2;
-                }
+                }   // TODO: implement wander code
                 break;
             case State.CHASE:
                 if(step){
@@ -120,6 +167,7 @@ public class MobBehavior : MonoBehaviour
                     sr.GetComponent<SpriteRenderer>().sprite = spr_walk2;
                 }
                 if(Vector3.Distance(transform.position, player.transform.position) > 2.5f){
+		            if(GetComponent<StatHandler>().isStunned || GetComponent<StatHandler>().isRooted ){ return; }
                     transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 4.0f * Time.deltaTime);
                 } else if(Vector3.Distance(transform.position, player.transform.position) <= 3.0f){
                     status = State.WINDUP;
@@ -137,6 +185,7 @@ public class MobBehavior : MonoBehaviour
                 }
                     // still not there
                 if(Vector3.Distance(transform.position, originpoint) > 0.001f){
+		            if(GetComponent<StatHandler>().isStunned || GetComponent<StatHandler>().isRooted){ return; }
                     transform.position = Vector3.MoveTowards(transform.position, originpoint, 2.0f * Time.deltaTime);
                 } else {
                     status = State.IDLE;
